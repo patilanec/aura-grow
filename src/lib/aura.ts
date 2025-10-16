@@ -2,6 +2,38 @@ import { getCache, setCache } from './cache'
 
 export type AuraBalancesResponse = unknown
 
+export type AuraStrategiesResponse = {
+  address: string
+  strategies: Array<{
+    llm: {
+      provider: string
+      model: string
+    }
+    response: Array<{
+      name: string
+      risk: 'low' | 'moderate' | 'high' | 'opportunistic'
+      actions: Array<{
+        tokens: string
+        description: string
+        platforms: Array<{
+          name: string
+          url: string
+        }>
+        networks: string[]
+        operations: string[]
+        apy: string
+        flags: string[]
+      }>
+    }>
+    responseTime: number
+    error: string | null
+    hash: string
+  }>
+  portfolio: any[]
+  cached: boolean
+  version: string
+}
+
 export async function fetchAuraBalances(
   address: string,
   apiKey?: string
@@ -16,6 +48,27 @@ export async function fetchAuraBalances(
 
   if (!response.ok) {
     throw new Error(`AURA API error: ${response.status} ${response.statusText}`)
+  }
+
+  return response.json()
+}
+
+export async function fetchAuraStrategies(
+  address: string,
+  apiKey?: string
+): Promise<AuraStrategiesResponse> {
+  const url = new URL('https://aura.adex.network/api/portfolio/strategies')
+  url.searchParams.set('address', address)
+  if (apiKey) {
+    url.searchParams.set('apiKey', apiKey)
+  }
+
+  const response = await fetch(url.toString())
+
+  if (!response.ok) {
+    throw new Error(
+      `AURA Strategies API error: ${response.status} ${response.statusText}`
+    )
   }
 
   return response.json()
@@ -125,5 +178,72 @@ export async function getPrincipalUsd(
       error: error instanceof Error ? error.message : 'Unknown error',
     })
     throw error
+  }
+}
+
+export function extractStrategiesByRisk(data: AuraStrategiesResponse): {
+  low: string[]
+  moderate: string[]
+  high: string[]
+} {
+  const strategies = {
+    low: [] as string[],
+    moderate: [] as string[],
+    high: [] as string[],
+  }
+
+  if (!data?.strategies?.[0]?.response) {
+    return strategies
+  }
+
+  for (const strategy of data.strategies[0].response) {
+    const risk = strategy.risk
+    const name = strategy.name
+
+    if (risk === 'low' && strategies.low.length < 2) {
+      strategies.low.push(name)
+    } else if (risk === 'moderate' && strategies.moderate.length < 2) {
+      strategies.moderate.push(name)
+    } else if (
+      (risk === 'high' || risk === 'opportunistic') &&
+      strategies.high.length < 2
+    ) {
+      strategies.high.push(name)
+    }
+  }
+
+  return strategies
+}
+
+export async function getAuraStrategies(
+  address: string,
+  apiKey?: string
+): Promise<{
+  strategies: ReturnType<typeof extractStrategiesByRisk>
+  cached: boolean
+}> {
+  const cacheKey = `strategies:${address}:${apiKey ?? ''}`
+
+  // Check cache first
+  const cached = getCache<AuraStrategiesResponse>(cacheKey)
+  if (cached) {
+    const strategies = extractStrategiesByRisk(cached)
+    return { strategies, cached: true }
+  }
+
+  try {
+    const data = await fetchAuraStrategies(address, apiKey)
+
+    // Cache the response
+    setCache(cacheKey, data)
+
+    const strategies = extractStrategiesByRisk(data)
+    return { strategies, cached: false }
+  } catch (error) {
+    // Return empty strategies on error - will fallback to defaults
+    return {
+      strategies: { low: [], moderate: [], high: [] },
+      cached: false,
+    }
   }
 }

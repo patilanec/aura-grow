@@ -151,7 +151,10 @@ function App() {
                 onChangeAddress={handleChangeAddress}
               />
 
-              <ScenarioPlayground principalUsd={state.principalUsd} />
+              <ScenarioPlayground
+                principalUsd={state.principalUsd}
+                address={state.address}
+              />
             </div>
           )}
         </main>
