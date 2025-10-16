@@ -2,7 +2,10 @@ import { getCache, setCache } from './cache'
 
 export type AuraBalancesResponse = unknown
 
-export async function fetchAuraBalances(address: string, apiKey?: string): Promise<AuraBalancesResponse> {
+export async function fetchAuraBalances(
+  address: string,
+  apiKey?: string
+): Promise<AuraBalancesResponse> {
   const url = new URL('https://aura.adex.network/api/portfolio/balances')
   url.searchParams.set('address', address)
   if (apiKey) {
@@ -10,11 +13,11 @@ export async function fetchAuraBalances(address: string, apiKey?: string): Promi
   }
 
   const response = await fetch(url.toString())
-  
+
   if (!response.ok) {
     throw new Error(`AURA API error: ${response.status} ${response.statusText}`)
   }
-  
+
   return response.json()
 }
 
@@ -34,7 +37,24 @@ export function extractTotalUsd(data: any): number | null {
     return data.usdTotal
   }
 
-  // Try to sum from assets array
+  // New AURA API structure: sum all balanceUSD from all tokens across all networks
+  if (Array.isArray(data.portfolio)) {
+    let total = 0
+    for (const network of data.portfolio) {
+      if (Array.isArray(network.tokens)) {
+        for (const token of network.tokens) {
+          if (typeof token.balanceUSD === 'number') {
+            total += token.balanceUSD
+          }
+        }
+      }
+    }
+    if (total > 0) {
+      return total
+    }
+  }
+
+  // Try to sum from assets array (legacy format)
   if (Array.isArray(data.assets)) {
     let total = 0
     for (const asset of data.assets) {
@@ -55,16 +75,25 @@ export function extractTotalUsd(data: any): number | null {
 }
 
 export async function getPrincipalUsd(
-  address: string, 
+  address: string,
   apiKey?: string
-): Promise<{ principal: number | null; cached: boolean; responseTimeMs: number }> {
+): Promise<{
+  principal: number | null
+  cached: boolean
+  responseTimeMs: number
+}> {
   const cacheKey = `balances:${address}:${apiKey ?? ''}`
-  
+
   // Check cache first
   const cached = getCache<AuraBalancesResponse>(cacheKey)
   if (cached) {
     const principal = extractTotalUsd(cached)
-    console.log({ address, cached: true, responseTimeMs: 0, principalUsd: principal })
+    console.log({
+      address,
+      cached: true,
+      responseTimeMs: 0,
+      principalUsd: principal,
+    })
     return { principal, cached: true, responseTimeMs: 0 }
   }
 
@@ -73,17 +102,28 @@ export async function getPrincipalUsd(
   try {
     const data = await fetchAuraBalances(address, apiKey)
     const responseTimeMs = Date.now() - startTime
-    
+
     // Cache the response
     setCache(cacheKey, data)
-    
+
     const principal = extractTotalUsd(data)
-    console.log({ address, cached: false, responseTimeMs, principalUsd: principal })
-    
+    console.log({
+      address,
+      cached: false,
+      responseTimeMs,
+      principalUsd: principal,
+    })
+
     return { principal, cached: false, responseTimeMs }
   } catch (error) {
     const responseTimeMs = Date.now() - startTime
-    console.log({ address, cached: false, responseTimeMs, principalUsd: null, error: error instanceof Error ? error.message : 'Unknown error' })
+    console.log({
+      address,
+      cached: false,
+      responseTimeMs,
+      principalUsd: null,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
     throw error
   }
 }
