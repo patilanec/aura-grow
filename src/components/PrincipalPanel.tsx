@@ -1,0 +1,90 @@
+import { useState } from 'react'
+import { formatCurrency } from '../lib/format'
+
+interface PrincipalPanelProps {
+  principal: number
+  source: 'AURA' | 'Manual'
+  cached?: boolean
+  onUpdatePrincipal: (newPrincipal: number) => void
+}
+
+export function PrincipalPanel({ principal, source, cached = false, onUpdatePrincipal }: PrincipalPanelProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editValue, setEditValue] = useState(principal.toString())
+
+  const handleSave = () => {
+    const numValue = parseFloat(editValue)
+    if (!isNaN(numValue) && numValue > 0) {
+      onUpdatePrincipal(numValue)
+      setIsEditing(false)
+    }
+  }
+
+  const handleCancel = () => {
+    setEditValue(principal.toString())
+    setIsEditing(false)
+  }
+
+  return (
+    <div className="card">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-sm font-medium text-gray-600">Principal</span>
+            <span className={`px-2 py-1 text-xs rounded-full ${
+              source === 'AURA' 
+                ? 'bg-blue-100 text-blue-800' 
+                : 'bg-gray-100 text-gray-800'
+            }`}>
+              {source}
+            </span>
+            {cached && (
+              <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                cached
+              </span>
+            )}
+          </div>
+          
+          {isEditing ? (
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                className="input-field w-32"
+                min="0"
+                step="0.01"
+              />
+              <button
+                onClick={handleSave}
+                className="btn-primary text-sm"
+              >
+                Save
+              </button>
+              <button
+                onClick={handleCancel}
+                className="btn-secondary text-sm"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-gray-900">
+                {formatCurrency(principal)}
+              </span>
+              {source === 'Manual' && (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="text-blue-600 hover:text-blue-800 text-sm"
+                >
+                  Edit
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

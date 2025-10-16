@@ -1,0 +1,67 @@
+import { useState } from 'react'
+import { makeSeries } from '../lib/compound'
+import { CompoundChart } from './CompoundChart'
+import { KpiStrip } from './KpiStrip'
+
+interface ScenarioPlaygroundProps {
+  principalUsd: number
+}
+
+export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
+  const [ratePct, setRatePct] = useState<3 | 6 | 10>(6)
+  const [years, setYears] = useState(5)
+
+  const data = makeSeries(principalUsd, ratePct, years)
+
+  return (
+    <div className="space-y-6">
+      <div className="card">
+        <h2 className="text-lg font-semibold mb-4">Scenario Playground</h2>
+        
+        {/* Rate Selection */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Annual Interest Rate
+          </label>
+          <div className="flex gap-2">
+            {([3, 6, 10] as const).map((rate) => (
+              <button
+                key={rate}
+                onClick={() => setRatePct(rate)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  ratePct === rate
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                {rate}%
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Years Slider */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Time Period: {years} {years === 1 ? 'year' : 'years'}
+          </label>
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={years}
+            onChange={(e) => setYears(parseInt(e.target.value))}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          />
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <span>1 year</span>
+            <span>10 years</span>
+          </div>
+        </div>
+      </div>
+
+      <KpiStrip principal={principalUsd} ratePct={ratePct} years={years} />
+      <CompoundChart data={data} />
+    </div>
+  )
+}
