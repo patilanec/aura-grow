@@ -8,7 +8,8 @@ const memoryCache = new Map<string, CacheEntry<any>>()
 export function getCache<T>(key: string): T | null {
   // Check memory cache first
   const memoryEntry = memoryCache.get(key)
-  if (memoryEntry && Date.now() - memoryEntry.at < 3600000) { // 1 hour TTL
+  if (memoryEntry && Date.now() - memoryEntry.at < 3600000) {
+    // 1 hour TTL
     return memoryEntry.data
   }
 
@@ -17,7 +18,8 @@ export function getCache<T>(key: string): T | null {
     const stored = localStorage.getItem(`cache:${key}`)
     if (stored) {
       const entry: CacheEntry<T> = JSON.parse(stored)
-      if (Date.now() - entry.at < 3600000) { // 1 hour TTL
+      if (Date.now() - entry.at < 3600000) {
+        // 1 hour TTL
         // Restore to memory cache
         memoryCache.set(key, entry)
         return entry.data
@@ -33,10 +35,14 @@ export function getCache<T>(key: string): T | null {
   return null
 }
 
-export function setCache<T>(key: string, value: T, ttlMs: number = 3600000): void {
+export function setCache<T>(
+  key: string,
+  value: T,
+  _ttlMs: number = 3600000
+): void {
   const entry: CacheEntry<T> = {
     data: value,
-    at: Date.now()
+    at: Date.now(),
   }
 
   // Store in memory cache

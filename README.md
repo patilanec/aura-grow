@@ -4,6 +4,7 @@ A tiny educational app that visualizes compound vs simple interest growth using 
 
 ## Features
 
+- **Web3 Wallet Connection**: Connect directly with popular wallets (MetaMask, Coinbase Wallet, WalletConnect)
 - **Wallet Integration**: Fetches total USD balance from AURA API using any EVM address or ENS name
 - **Interactive Scenarios**: Compare compound vs simple interest across different rates (3%, 6%, 10%) and time periods (1-10 years)
 - **Real-time Visualization**: Clean line chart showing growth over time
@@ -18,11 +19,12 @@ A tiny educational app that visualizes compound vs simple interest growth using 
    npm install
    ```
 
-2. **Optional: Set AURA API Key** (for higher rate limits):
+2. **Optional: Set API Keys** (for enhanced functionality):
 
    ```bash
    # Create .env file
    echo "VITE_AURA_API_KEY=your_api_key_here" > .env
+   echo "VITE_WALLETCONNECT_PROJECT_ID=your_project_id_here" >> .env
    ```
 
 3. **Start development server**:
@@ -38,10 +40,11 @@ A tiny educational app that visualizes compound vs simple interest growth using 
 
 ## Usage
 
-1. Enter an EVM wallet address (0x...) or ENS name
-2. The app fetches your total USD balance from AURA
-3. Use the scenario controls to explore different interest rates and time periods
-4. Compare simple vs compound interest growth in the interactive chart
+1. **Connect Wallet** (Recommended): Click "Connect Wallet" to connect directly with your Web3 wallet
+2. **Manual Entry**: Alternatively, enter an EVM wallet address (0x...) or ENS name manually
+3. The app fetches your total USD balance from AURA
+4. Use the scenario controls to explore different interest rates and time periods
+5. Compare simple vs compound interest growth in the interactive chart
 
 ## API Integration
 
@@ -54,6 +57,7 @@ The app integrates with the AURA API to fetch wallet balances:
 ## Tech Stack
 
 - **Frontend**: React 18 + TypeScript + Vite
+- **Web3**: Wagmi + Viem for wallet connections
 - **Styling**: TailwindCSS
 - **Charts**: Recharts
 - **State**: Local component state (no Redux)
