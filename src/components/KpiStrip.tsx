@@ -14,38 +14,39 @@ export function KpiStrip({ principal, ratePct, years }: KpiStripProps) {
   const upliftPct = ((finalCompound - finalSimple) / finalSimple) * 100
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">
-          Your balance after {years} {years === 1 ? 'year' : 'years'} (simple)
+    <div className="space-y-4 mb-6">
+      {/* Main compound result - WOW factor */}
+      <div className="card text-center bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
+        <div className="text-lg font-semibold text-green-800 mb-2">
+          🚀 Your balance after {years} {years === 1 ? 'year' : 'years'} with
+          compound growth
         </div>
-        <div className="text-xl font-bold text-gray-900">
-          {formatCurrency(finalSimple)}
-        </div>
-      </div>
-
-      <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">
-          Your balance after {years} {years === 1 ? 'year' : 'years'} (compound)
-        </div>
-        <div className="text-xl font-bold text-green-600">
+        <div className="text-4xl font-bold text-green-600 mb-2">
           {formatCurrency(finalCompound)}
         </div>
-      </div>
-
-      <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">
-          Extra growth thanks to compounding
-        </div>
-        <div className="text-xl font-bold text-blue-600">
-          {formatCurrency(upliftAbs)}
+        <div className="text-sm text-green-700">
+          Starting from {formatCurrency(principal)} at {ratePct}% annually
         </div>
       </div>
 
-      <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">Compounding advantage</div>
-        <div className="text-xl font-bold text-purple-600">
-          {formatPercent(upliftPct)}
+      {/* Secondary metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="card text-center">
+          <div className="text-sm text-gray-600 mb-1">
+            Extra growth thanks to compounding
+          </div>
+          <div className="text-2xl font-bold text-blue-600">
+            {formatCurrency(upliftAbs)}
+          </div>
+        </div>
+
+        <div className="card text-center">
+          <div className="text-sm text-gray-600 mb-1">
+            Compounding advantage
+          </div>
+          <div className="text-2xl font-bold text-purple-600">
+            {formatPercent(upliftPct)}
+          </div>
         </div>
       </div>
     </div>
