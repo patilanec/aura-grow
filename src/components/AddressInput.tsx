@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { WalletConnect } from './WalletConnect'
 
 interface AddressInputProps {
-  onSubmit: (address: string) => void
+  onSubmit: (address: string, isWalletConnected?: boolean) => void
   loading?: boolean
 }
 
@@ -14,12 +14,12 @@ export function AddressInput({ onSubmit, loading = false }: AddressInputProps) {
     e.preventDefault()
     const trimmed = address.trim()
     if (trimmed) {
-      onSubmit(trimmed)
+      onSubmit(trimmed, false) // Manual entry, not wallet connected
     }
   }
 
   const handleWalletConnect = (connectedAddress: string) => {
-    onSubmit(connectedAddress)
+    onSubmit(connectedAddress, true) // Wallet connected
   }
 
   const handleCancelWalletConnect = () => {

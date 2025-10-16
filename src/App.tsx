@@ -6,6 +6,7 @@ import { ScenarioPlayground } from './components/ScenarioPlayground'
 import { ErrorCard } from './components/ErrorCard'
 import { PrincipalSkeleton, ChartSkeleton } from './components/Skeleton'
 import { Web3Provider } from './components/Web3Provider'
+import { WalletAccountListener } from './components/WalletAccountListener'
 
 type PrincipalSource = 'AURA' | 'Manual'
 
@@ -16,6 +17,8 @@ interface AppState {
   cached: boolean
   loading: boolean
   error: string | null
+  isWalletConnected: boolean
+  isChangingAddress: boolean
 }
 
 function App() {
@@ -26,12 +29,19 @@ function App() {
     cached: false,
     loading: false,
     error: null,
+    isWalletConnected: false,
+    isChangingAddress: false,
   })
 
-  const handleAddressSubmit = async (address: string) => {
+  const handleAddressSubmit = async (
+    address: string,
+    isWalletConnected: boolean = false
+  ) => {
     setState((prev) => ({
       ...prev,
       address,
+      isWalletConnected,
+      isChangingAddress: false,
       loading: true,
       error: null,
     }))
@@ -72,7 +82,7 @@ function App() {
 
   const handleRetry = () => {
     if (state.address) {
-      handleAddressSubmit(state.address)
+      handleAddressSubmit(state.address, state.isWalletConnected)
     }
   }
 
@@ -94,7 +104,14 @@ function App() {
       source: 'Manual',
       cached: false,
       error: null,
+      isWalletConnected: false,
+      isChangingAddress: true,
     }))
+  }
+
+  // Handle wallet address changes
+  const handleWalletAddressChange = (newAddress: string) => {
+    handleAddressSubmit(newAddress, true)
   }
 
   const handleUpdatePrincipal = (newPrincipal: number) => {
@@ -106,6 +123,12 @@ function App() {
 
   return (
     <Web3Provider>
+      <WalletAccountListener
+        onAddressChange={handleWalletAddressChange}
+        currentAddress={state.address}
+        isWalletConnected={state.isWalletConnected}
+        isChangingAddress={state.isChangingAddress}
+      />
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <header className="text-center mb-8">
@@ -150,6 +173,7 @@ function App() {
                   principal={state.principalUsd}
                   source={state.source}
                   cached={state.cached}
+                  isWalletConnected={state.isWalletConnected}
                   onUpdatePrincipal={handleUpdatePrincipal}
                   onChangeAddress={handleChangeAddress}
                 />

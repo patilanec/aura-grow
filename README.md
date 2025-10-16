@@ -5,6 +5,7 @@ A tiny educational app that visualizes compound vs simple interest growth using 
 ## Features
 
 - **Web3 Wallet Connection**: Connect directly with popular wallets (MetaMask, Coinbase Wallet, WalletConnect)
+- **Auto Wallet Sync**: Automatically updates when you switch accounts in your connected wallet
 - **Wallet Integration**: Fetches total USD balance from AURA API using any EVM address or ENS name
 - **Interactive Scenarios**: Compare compound vs simple interest across different rates (3%, 6%, 10%) and time periods (1-10 years)
 - **Real-time Visualization**: Clean line chart showing growth over time

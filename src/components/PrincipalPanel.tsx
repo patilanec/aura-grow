@@ -5,6 +5,7 @@ interface PrincipalPanelProps {
   principal: number
   source: 'AURA' | 'Manual'
   cached?: boolean
+  isWalletConnected?: boolean
   onUpdatePrincipal: (newPrincipal: number) => void
   onChangeAddress: () => void
 }
@@ -13,6 +14,7 @@ export function PrincipalPanel({
   principal,
   source,
   cached = false,
+  isWalletConnected = false,
   onUpdatePrincipal,
   onChangeAddress,
 }: PrincipalPanelProps) {
@@ -50,6 +52,11 @@ export function PrincipalPanel({
               >
                 {source === 'AURA' ? 'From AURA' : 'Manual'}
               </span>
+              {isWalletConnected && (
+                <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                  🔗 Wallet Connected
+                </span>
+              )}
               {cached && (
                 <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
                   loaded from cache
