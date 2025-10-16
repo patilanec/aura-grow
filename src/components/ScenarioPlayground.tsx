@@ -8,8 +8,8 @@ interface ScenarioPlaygroundProps {
 }
 
 export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
-  const [ratePct, setRatePct] = useState<3 | 6 | 10>(6)
-  const [years, setYears] = useState(5)
+  const [ratePct, setRatePct] = useState<4 | 11 | 21>(11)
+  const [years, setYears] = useState(30)
 
   const data = makeSeries(principalUsd, ratePct, years)
 
@@ -22,6 +22,25 @@ export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
           outcome. Compounding means your gains also earn gains — small
           percentages make a big difference over years.
         </p>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <h4 className="font-medium text-blue-900 mb-2">
+            Realistic Crypto Strategies:
+          </h4>
+          <ul className="text-sm text-blue-800 space-y-1">
+            <li>
+              <strong>4% (Stable Yields):</strong> Lido staking, USDC lending —
+              lower risk, steady returns
+            </li>
+            <li>
+              <strong>11% (DeFi Pools):</strong> Aave, Balancer, Uniswap —
+              moderate risk, proven protocols
+            </li>
+            <li>
+              <strong>21% (Aggressive Farming):</strong> Yield vaults, LSDfi —
+              higher risk, bull market opportunities
+            </li>
+          </ul>
+        </div>
 
         {/* Rate Selection */}
         <div className="mb-6">
@@ -29,7 +48,7 @@ export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
             Annual Growth Rate (examples to learn from)
           </label>
           <div className="flex gap-2">
-            {([3, 6, 10] as const).map((rate) => (
+            {([4, 11, 21] as const).map((rate) => (
               <button
                 key={rate}
                 onClick={() => setRatePct(rate)}
@@ -38,14 +57,14 @@ export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
-                title={`${rate}% annual rate - ${rate === 3 ? 'conservative' : rate === 6 ? 'moderate' : 'aggressive'} example`}
+                title={`${rate}% annual rate - ${rate === 4 ? 'stable yields (Lido, USDC lending)' : rate === 11 ? 'DeFi pools (Aave, Balancer)' : 'aggressive farming (vaults, LSDfi)'}`}
               >
                 {rate}%{' '}
-                {rate === 3
-                  ? '(conservative)'
-                  : rate === 6
-                    ? '(moderate)'
-                    : '(aggressive)'}
+                {rate === 4
+                  ? '(stable yields)'
+                  : rate === 11
+                    ? '(DeFi pools)'
+                    : '(aggressive farming)'}
               </button>
             ))}
           </div>
@@ -59,14 +78,14 @@ export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
           <input
             type="range"
             min="1"
-            max="10"
+            max="35"
             value={years}
             onChange={(e) => setYears(parseInt(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
           />
           <div className="flex justify-between text-xs text-gray-500 mt-1">
             <span>1 year</span>
-            <span>10 years</span>
+            <span>35 years</span>
           </div>
         </div>
       </div>
