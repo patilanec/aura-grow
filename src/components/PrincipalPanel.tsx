@@ -6,9 +6,16 @@ interface PrincipalPanelProps {
   source: 'AURA' | 'Manual'
   cached?: boolean
   onUpdatePrincipal: (newPrincipal: number) => void
+  onChangeAddress: () => void
 }
 
-export function PrincipalPanel({ principal, source, cached = false, onUpdatePrincipal }: PrincipalPanelProps) {
+export function PrincipalPanel({
+  principal,
+  source,
+  cached = false,
+  onUpdatePrincipal,
+  onChangeAddress,
+}: PrincipalPanelProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(principal.toString())
 
@@ -29,22 +36,34 @@ export function PrincipalPanel({ principal, source, cached = false, onUpdatePrin
     <div className="card">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm font-medium text-gray-600">Principal</span>
-            <span className={`px-2 py-1 text-xs rounded-full ${
-              source === 'AURA' 
-                ? 'bg-blue-100 text-blue-800' 
-                : 'bg-gray-100 text-gray-800'
-            }`}>
-              {source}
-            </span>
-            {cached && (
-              <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                cached
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-600">
+                Starting Balance
               </span>
-            )}
+              <span
+                className={`px-2 py-1 text-xs rounded-full ${
+                  source === 'AURA'
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}
+              >
+                {source === 'AURA' ? 'From AURA' : 'Manual'}
+              </span>
+              {cached && (
+                <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                  loaded from cache
+                </span>
+              )}
+            </div>
+            <button
+              onClick={onChangeAddress}
+              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Change Address
+            </button>
           </div>
-          
+
           {isEditing ? (
             <div className="flex items-center gap-2">
               <input
@@ -55,16 +74,10 @@ export function PrincipalPanel({ principal, source, cached = false, onUpdatePrin
                 min="0"
                 step="0.01"
               />
-              <button
-                onClick={handleSave}
-                className="btn-primary text-sm"
-              >
+              <button onClick={handleSave} className="btn-primary text-sm">
                 Save
               </button>
-              <button
-                onClick={handleCancel}
-                className="btn-secondary text-sm"
-              >
+              <button onClick={handleCancel} className="btn-secondary text-sm">
                 Cancel
               </button>
             </div>
@@ -78,7 +91,7 @@ export function PrincipalPanel({ principal, source, cached = false, onUpdatePrin
                   onClick={() => setIsEditing(true)}
                   className="text-blue-600 hover:text-blue-800 text-sm"
                 >
-                  Edit
+                  Adjust Amount
                 </button>
               )}
             </div>

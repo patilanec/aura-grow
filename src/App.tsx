@@ -107,10 +107,9 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Aura Grow</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">AuraGrow</h1>
           <p className="text-gray-600">
-            Visualize compound vs simple interest growth using your wallet
-            balance
+            Learn how compound interest grows your crypto — powered by AURA data
           </p>
         </header>
 
@@ -149,6 +148,7 @@ function App() {
                 source={state.source}
                 cached={state.cached}
                 onUpdatePrincipal={handleUpdatePrincipal}
+                onChangeAddress={handleChangeAddress}
               />
 
               <ScenarioPlayground principalUsd={state.principalUsd} />
@@ -159,14 +159,16 @@ function App() {
         {/* Footer */}
         <footer className="mt-12 text-center text-sm text-gray-500 space-y-2">
           <p>
-            <strong>Educational simulation.</strong> Not financial advice.
+            <strong>AuraGrow is a learning tool powered by AURA data.</strong>{' '}
+            It's not financial advice — just a visual way to understand how
+            compound interest works.
           </p>
           {state.principalUsd && (
             <p>
-              Initial amount{' '}
+              Starting amount{' '}
               {state.source === 'AURA'
-                ? 'from AURA balances'
-                : 'entered manually'}
+                ? 'loaded from your AURA portfolio'
+                : 'entered manually for learning'}
             </p>
           )}
         </footer>

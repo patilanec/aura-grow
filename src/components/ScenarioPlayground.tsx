@@ -16,12 +16,17 @@ export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
   return (
     <div className="space-y-6">
       <div className="card">
-        <h2 className="text-lg font-semibold mb-4">Scenario Playground</h2>
-        
+        <h2 className="text-lg font-semibold mb-2">Explore Growth Scenarios</h2>
+        <p className="text-gray-600 mb-4">
+          Move the sliders and see how time and interest rate change your
+          outcome. Compounding means your gains also earn gains — small
+          percentages make a big difference over years.
+        </p>
+
         {/* Rate Selection */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Annual Interest Rate
+            Annual Growth Rate (examples to learn from)
           </label>
           <div className="flex gap-2">
             {([3, 6, 10] as const).map((rate) => (
@@ -33,8 +38,14 @@ export function ScenarioPlayground({ principalUsd }: ScenarioPlaygroundProps) {
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
+                title={`${rate}% annual rate - ${rate === 3 ? 'conservative' : rate === 6 ? 'moderate' : 'aggressive'} example`}
               >
-                {rate}%
+                {rate}%{' '}
+                {rate === 3
+                  ? '(conservative)'
+                  : rate === 6
+                    ? '(moderate)'
+                    : '(aggressive)'}
               </button>
             ))}
           </div>

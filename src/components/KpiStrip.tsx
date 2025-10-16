@@ -16,28 +16,34 @@ export function KpiStrip({ principal, ratePct, years }: KpiStripProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">Final Simple</div>
+        <div className="text-sm text-gray-600 mb-1">
+          Your balance after {years} {years === 1 ? 'year' : 'years'} (simple)
+        </div>
         <div className="text-xl font-bold text-gray-900">
           {formatCurrency(finalSimple)}
         </div>
       </div>
-      
+
       <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">Final Compound</div>
+        <div className="text-sm text-gray-600 mb-1">
+          Your balance after {years} {years === 1 ? 'year' : 'years'} (compound)
+        </div>
         <div className="text-xl font-bold text-green-600">
           {formatCurrency(finalCompound)}
         </div>
       </div>
-      
+
       <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">Uplift ($)</div>
+        <div className="text-sm text-gray-600 mb-1">
+          Extra growth thanks to compounding
+        </div>
         <div className="text-xl font-bold text-blue-600">
           {formatCurrency(upliftAbs)}
         </div>
       </div>
-      
+
       <div className="card text-center">
-        <div className="text-sm text-gray-600 mb-1">Uplift (%)</div>
+        <div className="text-sm text-gray-600 mb-1">Compounding advantage</div>
         <div className="text-xl font-bold text-purple-600">
           {formatPercent(upliftPct)}
         </div>

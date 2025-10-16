@@ -1,4 +1,13 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts'
 import { formatCurrency } from '../lib/format'
 
 interface DataPoint {
@@ -16,37 +25,36 @@ export function CompoundChart({ data }: CompoundChartProps) {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-4">Growth Comparison</h3>
+      <h3 className="text-lg font-semibold mb-4">
+        How Your Balance Could Grow Over Time
+      </h3>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="year" 
-              tickFormatter={(value) => `Year ${value}`}
-            />
-            <YAxis 
+            <XAxis dataKey="year" tickFormatter={(value) => `Year ${value}`} />
+            <YAxis
               tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
             />
-            <Tooltip 
+            <Tooltip
               formatter={(value: number) => [formatTooltipValue(value), '']}
               labelFormatter={(label) => `Year ${label}`}
             />
             <Legend />
-            <Line 
-              type="monotone" 
-              dataKey="simple" 
-              stroke="#6b7280" 
+            <Line
+              type="monotone"
+              dataKey="simple"
+              stroke="#6b7280"
               strokeWidth={2}
-              name="Simple Interest"
+              name="Simple Growth"
               dot={false}
             />
-            <Line 
-              type="monotone" 
-              dataKey="compound" 
-              stroke="#10b981" 
+            <Line
+              type="monotone"
+              dataKey="compound"
+              stroke="#10b981"
               strokeWidth={2}
-              name="Compound Interest"
+              name="Compound Growth"
               dot={false}
             />
           </LineChart>
