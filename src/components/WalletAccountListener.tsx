@@ -20,19 +20,8 @@ export function WalletAccountListener({
   const processedInThisSession = useRef<Set<string>>(new Set())
 
   useEffect(() => {
-    console.log('WalletAccountListener useEffect triggered:', {
-      isConnected,
-      address,
-      currentAddress,
-      isChangingAddress,
-      isProcessing: isProcessing.current,
-      lastProcessed: lastProcessedAddress.current,
-      processedInSession: Array.from(processedInThisSession.current),
-    })
-
     // Prevent any processing if we're already processing or changing address
     if (isProcessing.current || isChangingAddress) {
-      console.log('Skipping - already processing or changing address')
       return
     }
 
@@ -49,7 +38,6 @@ export function WalletAccountListener({
       address !== currentAddress &&
       !processedInThisSession.current.has(address)
     ) {
-      console.log('Processing address change:', address)
       isProcessing.current = true
       lastProcessedAddress.current = address
       processedInThisSession.current.add(address)
@@ -59,26 +47,15 @@ export function WalletAccountListener({
         onAddressChange(address)
         isProcessing.current = false
       }, 0)
-    } else {
-      console.log('Not processing - conditions not met')
     }
   }, [address, isConnected, currentAddress, isChangingAddress, onAddressChange])
 
   // Reset when current address changes
   useEffect(() => {
-    console.log('Current address changed:', {
-      currentAddress,
-      lastProcessed: lastProcessedAddress.current,
-    })
     if (currentAddress !== lastProcessedAddress.current) {
       lastProcessedAddress.current = currentAddress
       // Clear the processed set when address changes
       processedInThisSession.current.clear()
-      console.log(
-        'Reset lastProcessedAddress to:',
-        currentAddress,
-        'and cleared processed set'
-      )
     }
   }, [currentAddress])
 
