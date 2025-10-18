@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { getPrincipalUsd } from './lib/aura'
 import { AddressInput } from './components/AddressInput'
 import { PrincipalPanel } from './components/PrincipalPanel'
@@ -32,11 +32,37 @@ function App() {
     isWalletConnected: false,
     isChangingAddress: false,
   })
+  const isProcessingRef = useRef<boolean>(false)
 
   const handleAddressSubmit = async (
     address: string,
     isWalletConnected: boolean = false
   ) => {
+    console.log('handleAddressSubmit called:', {
+      address,
+      isWalletConnected,
+      currentState: state,
+      isProcessing: isProcessingRef.current,
+    })
+
+    // Prevent processing if we're already processing
+    if (isProcessingRef.current) {
+      console.log('Skipping - already processing')
+      return
+    }
+
+    // Prevent processing if we're already loading or if it's the same address
+    if (
+      state.loading ||
+      (state.address === address &&
+        state.isWalletConnected === isWalletConnected)
+    ) {
+      console.log('Skipping - already loading or same address/connection state')
+      return
+    }
+
+    console.log('Setting processing flag and loading state')
+    isProcessingRef.current = true
     setState((prev) => ({
       ...prev,
       address,
@@ -77,6 +103,8 @@ function App() {
         error:
           error instanceof Error ? error.message : 'Failed to fetch balance',
       }))
+    } finally {
+      isProcessingRef.current = false
     }
   }
 
@@ -97,6 +125,7 @@ function App() {
   }
 
   const handleChangeAddress = () => {
+    console.log('handleChangeAddress called - resetting state')
     setState((prev) => ({
       ...prev,
       address: '',
@@ -111,7 +140,17 @@ function App() {
 
   // Handle wallet address changes
   const handleWalletAddressChange = (newAddress: string) => {
-    handleAddressSubmit(newAddress, true)
+    console.log('handleWalletAddressChange called:', {
+      newAddress,
+      currentAddress: state.address,
+    })
+    // Only process if the address is actually different from current
+    if (newAddress !== state.address) {
+      console.log('Address different, calling handleAddressSubmit')
+      handleAddressSubmit(newAddress, true)
+    } else {
+      console.log('Address same, skipping')
+    }
   }
 
   const handleUpdatePrincipal = (newPrincipal: number) => {

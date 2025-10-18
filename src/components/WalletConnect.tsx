@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useConnect, useAccount, useDisconnect } from 'wagmi'
 
 interface WalletConnectProps {
@@ -13,12 +13,16 @@ export function WalletConnect({
   const { connect, connectors, isPending, error } = useConnect()
   const { address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
+  const onAddressConnectedRef = useRef(onAddressConnected)
+
+  // Keep the ref up to date
+  onAddressConnectedRef.current = onAddressConnected
 
   useEffect(() => {
     if (isConnected && address) {
-      onAddressConnected(address)
+      onAddressConnectedRef.current(address)
     }
-  }, [isConnected, address, onAddressConnected])
+  }, [isConnected, address])
 
   const handleConnect = (connector: any) => {
     connect({ connector })
