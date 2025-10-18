@@ -47,7 +47,9 @@ export async function fetchAuraBalances(
   const response = await fetch(url.toString())
 
   if (!response.ok) {
-    throw new Error(`AURA API error: ${response.status} ${response.statusText}`)
+    throw new Error(
+      `AdEx AURA API error: ${response.status} ${response.statusText}`
+    )
   }
 
   return response.json()
@@ -67,7 +69,7 @@ export async function fetchAuraStrategies(
 
   if (!response.ok) {
     throw new Error(
-      `AURA Strategies API error: ${response.status} ${response.statusText}`
+      `AdEx AURA Strategies API error: ${response.status} ${response.statusText}`
     )
   }
 
@@ -90,7 +92,7 @@ export function extractTotalUsd(data: any): number | null {
     return data.usdTotal
   }
 
-  // New AURA API structure: sum all balanceUSD from all tokens across all networks
+  // New AdEx AURA API structure: sum all balanceUSD from all tokens across all networks
   if (Array.isArray(data.portfolio)) {
     let total = 0
     for (const network of data.portfolio) {

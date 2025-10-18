@@ -171,8 +171,8 @@ function App() {
                   with your real crypto portfolio
                 </p>
                 <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                  Powered by AURA — we use your wallet balance as a starting
-                  point to visualize how time amplifies growth.
+                  Powered by AdEx AURA — we use your wallet balance as a
+                  starting point to visualize how time amplifies growth.
                 </p>
               </div>
 
@@ -235,7 +235,7 @@ function App() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    Powered by AURA
+                    Powered by AdEx AURA
                   </div>
                 </div>
               </div>
@@ -263,7 +263,7 @@ function App() {
                   </h3>
                   <p className="text-gray-600 text-sm">
                     Connect your wallet and see projections based on your actual
-                    AURA balance
+                    AdEx AURA balance
                   </p>
                 </div>
 
@@ -398,15 +398,15 @@ function App() {
           <footer className="mt-4 text-center text-sm text-gray-500 space-y-4">
             <div className="pt-1 pb-4">
               <p className="text-gray-600">
-                This is an educational tool powered by AURA. It's not financial
-                advice — it's here to help you understand how time and interest
-                shape results.
+                This is an educational tool powered by AdEx AURA. It's not
+                financial advice — it's here to help you understand how time and
+                interest shape results.
               </p>
               {state.principalUsd && (
                 <p className="mt-2 text-gray-500">
                   Starting amount{' '}
                   {state.source === 'AURA'
-                    ? 'loaded from AURA'
+                    ? 'loaded from AdEx AURA'
                     : 'entered manually for learning'}
                 </p>
               )}
@@ -417,7 +417,7 @@ function App() {
                   rel="noopener noreferrer"
                   className="hover:text-blue-600 transition-colors"
                 >
-                  Built for the AURA Hackathon
+                  Built for the AdEx AURA Hackathon
                 </a>
                 <span className="hidden sm:inline">•</span>
                 <a

@@ -50,7 +50,7 @@ export function PrincipalPanel({
                     : 'bg-gray-100 text-gray-800'
                 }`}
               >
-                {source === 'AURA' ? 'Loaded from AURA' : 'Manual amount'}
+                {source === 'AURA' ? 'Loaded from AdEx AURA' : 'Manual amount'}
               </span>
               {isWalletConnected && (
                 <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">

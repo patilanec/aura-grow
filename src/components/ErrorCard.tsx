@@ -29,7 +29,7 @@ export function ErrorCard({
         </div>
         <div className="ml-3 flex-1">
           <h3 className="text-sm font-medium text-red-800">
-            Couldn't load from AURA
+            Couldn't load from AdEx AURA
           </h3>
           <p className="mt-1 text-sm text-red-700">{message}</p>
           <p className="mt-2 text-sm text-gray-600">
