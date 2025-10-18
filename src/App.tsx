@@ -19,6 +19,8 @@ interface AppState {
   error: string | null
   isWalletConnected: boolean
   isChangingAddress: boolean
+  ratePct: 4 | 11 | 21
+  years: number
 }
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
     error: null,
     isWalletConnected: false,
     isChangingAddress: false,
+    ratePct: 11,
+    years: 30,
   })
   const isProcessingRef = useRef<boolean>(false)
 
@@ -139,6 +143,20 @@ function App() {
     setState((prev) => ({
       ...prev,
       principalUsd: newPrincipal,
+    }))
+  }
+
+  const handleUpdateRatePct = (newRatePct: 4 | 11 | 21) => {
+    setState((prev) => ({
+      ...prev,
+      ratePct: newRatePct,
+    }))
+  }
+
+  const handleUpdateYears = (newYears: number) => {
+    setState((prev) => ({
+      ...prev,
+      years: newYears,
     }))
   }
 
@@ -382,13 +400,18 @@ function App() {
                   source={state.source}
                   cached={state.cached}
                   isWalletConnected={state.isWalletConnected}
+                  ratePct={state.ratePct}
+                  years={state.years}
                   onUpdatePrincipal={handleUpdatePrincipal}
-                  onChangeAddress={handleChangeAddress}
                 />
 
                 <ScenarioPlayground
                   principalUsd={state.principalUsd}
                   address={state.address}
+                  ratePct={state.ratePct}
+                  years={state.years}
+                  onRatePctChange={handleUpdateRatePct}
+                  onYearsChange={handleUpdateYears}
                 />
               </div>
             )}

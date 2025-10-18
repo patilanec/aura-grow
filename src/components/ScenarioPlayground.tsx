@@ -2,19 +2,24 @@ import { useState, useEffect } from 'react'
 import { makeSeries } from '../lib/compound'
 import { getAuraStrategies } from '../lib/aura'
 import { CompoundChart } from './CompoundChart'
-import { KpiStrip } from './KpiStrip'
 
 interface ScenarioPlaygroundProps {
   principalUsd: number
   address?: string
+  ratePct: 4 | 11 | 21
+  years: number
+  onRatePctChange: (ratePct: 4 | 11 | 21) => void
+  onYearsChange: (years: number) => void
 }
 
 export function ScenarioPlayground({
   principalUsd,
   address,
+  ratePct,
+  years,
+  onRatePctChange,
+  onYearsChange,
 }: ScenarioPlaygroundProps) {
-  const [ratePct, setRatePct] = useState<4 | 11 | 21>(11)
-  const [years, setYears] = useState(30)
   const [auraStrategies, setAuraStrategies] = useState<{
     low: string[]
     moderate: string[]
@@ -102,7 +107,7 @@ export function ScenarioPlayground({
             {([4, 11, 21] as const).map((rate) => (
               <button
                 key={rate}
-                onClick={() => setRatePct(rate)}
+                onClick={() => onRatePctChange(rate)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   ratePct === rate
                     ? 'bg-blue-600 text-white'
@@ -131,7 +136,7 @@ export function ScenarioPlayground({
             min="1"
             max="35"
             value={years}
-            onChange={(e) => setYears(parseInt(e.target.value))}
+            onChange={(e) => onYearsChange(parseInt(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
           />
           <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -141,7 +146,6 @@ export function ScenarioPlayground({
         </div>
       </div>
 
-      <KpiStrip principal={principalUsd} ratePct={ratePct} years={years} />
       <CompoundChart data={data} />
     </div>
   )
