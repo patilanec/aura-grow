@@ -36,72 +36,59 @@ export function AddressInput({ onSubmit, loading = false }: AddressInputProps) {
   }
 
   return (
-    <div className="card">
-      <h2 className="text-lg font-semibold mb-2">Ready to explore?</h2>
-      <p className="text-gray-600 mb-4">
-        Connect your wallet or enter your address to fetch your total balance
-        from AURA. We'll use it as your starting point to explore how compound
-        interest works.
-      </p>
-
-      {/* Wallet Connect Option */}
-      <div className="mb-4">
+    <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-2xl border-2 border-blue-200 shadow-xl p-4">
+      {/* Horizontal Layout for Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-3">
         <button
           onClick={() => setShowWalletConnect(true)}
           disabled={loading}
-          className="w-full flex items-center justify-center p-4 border-2 border-blue-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 flex flex-col items-center justify-center p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium"
         >
-          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clipRule="evenodd"
+          <div className="flex items-center">
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Connect Wallet
+          </div>
+          <div className="text-xs opacity-90 mt-1">(Recommended)</div>
+        </button>
+
+        <div className="flex items-center justify-center text-sm text-gray-500 sm:hidden">
+          or
+        </div>
+
+        <div className="flex-1">
+          <form onSubmit={handleSubmit} className="space-y-2">
+            <input
+              id="address"
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="0x... or ENS name"
+              className="input-field text-sm"
+              disabled={loading}
+              aria-label="Enter wallet address"
             />
-          </svg>
-          Connect Wallet (Recommended)
-        </button>
-      </div>
-
-      {/* Divider */}
-      <div className="relative mb-4">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300" />
-        </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-500">or</span>
+            <button
+              type="submit"
+              disabled={loading || !address.trim()}
+              className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-2 px-4 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-sm"
+            >
+              {loading ? 'Loading...' : 'Enter manually'}
+            </button>
+          </form>
         </div>
       </div>
 
-      {/* Manual Address Input */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="address"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Enter wallet address manually
-          </label>
-          <input
-            id="address"
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="0x... or ENS name"
-            className="input-field"
-            disabled={loading}
-            aria-label="Enter wallet address"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={loading || !address.trim()}
-          className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Loading from AURA...' : 'Enter manually'}
-        </button>
-      </form>
-
-      <p className="text-xs text-gray-500 mt-3 text-center">
+      <p className="text-xs text-gray-500 text-center">
         No transactions are made. This is a learning simulation.
       </p>
     </div>
