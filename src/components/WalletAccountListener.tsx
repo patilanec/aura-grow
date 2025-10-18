@@ -11,7 +11,7 @@ interface WalletAccountListenerProps {
 export function WalletAccountListener({
   onAddressChange,
   currentAddress,
-  isWalletConnected,
+  isWalletConnected: _isWalletConnected,
   isChangingAddress,
 }: WalletAccountListenerProps) {
   const { address, isConnected } = useAccount()

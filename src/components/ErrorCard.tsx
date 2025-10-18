@@ -9,7 +9,7 @@ export function ErrorCard({
   message,
   onRetry,
   onUseManual,
-  onChangeAddress,
+  onChangeAddress: _onChangeAddress,
 }: ErrorCardProps) {
   return (
     <div className="card border-red-200 bg-red-50">
