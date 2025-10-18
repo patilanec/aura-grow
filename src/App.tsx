@@ -340,8 +340,8 @@ function App() {
           </main>
 
           {/* Footer */}
-          <footer className="mt-16 text-center text-sm text-gray-500 space-y-4">
-            <div className="border-t border-gray-200 pt-8">
+          <footer className="mt-4 text-center text-sm text-gray-500 space-y-4">
+            <div className="pt-1 pb-4">
               <p className="text-gray-600">
                 This is an educational tool powered by AURA. It's not financial
                 advice — it's here to help you understand how time and interest
@@ -355,12 +355,26 @@ function App() {
                     : 'entered manually for learning'}
                 </p>
               )}
-              <div className="mt-4 flex justify-center items-center space-x-6 text-xs text-gray-400">
-                <span>Built for hackathon</span>
-                <span>•</span>
-                <span>Powered by AURA</span>
-                <span>•</span>
-                <span>Educational purpose only</span>
+              <div className="mt-4 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs text-gray-400">
+                <a
+                  href="https://guide.adex.network/aura-hackathon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  Built for the AURA Hackathon
+                </a>
+                <span className="hidden sm:inline">•</span>
+                <a
+                  href="https://github.com/patilanec/aura-grow"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gray-600 transition-colors"
+                >
+                  📂 Open Source
+                </a>
+                <span className="hidden sm:inline">•</span>
+                <span>Made with 💜 for the crypto community</span>
               </div>
             </div>
           </footer>
