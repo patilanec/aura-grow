@@ -394,7 +394,7 @@ function App() {
 
             {/* Main Content */}
             {state.principalUsd && !state.loading && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <PrincipalPanel
                   principal={state.principalUsd}
                   source={state.source}

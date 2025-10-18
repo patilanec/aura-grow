@@ -45,8 +45,8 @@ export function PrincipalPanel({
   return (
     <div className="card bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
       {/* Header with title and badges */}
-      <div className="text-center mb-6">
-        <div className="text-lg font-semibold text-green-800 mb-3">
+      <div className="text-center mb-4">
+        <div className="text-lg font-semibold text-green-800 mb-2">
           🚀 Your Portfolio Growth Potential
         </div>
         <div className="flex items-center justify-center gap-2">
@@ -73,9 +73,9 @@ export function PrincipalPanel({
       </div>
 
       {/* Main comparison - clean and focused */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-4">
         {/* Visual comparison with wow effect */}
-        <div className="flex items-center justify-center gap-6 mb-4">
+        <div className="flex items-center justify-center gap-6 mb-3">
           <div className="text-center">
             <div className="text-sm text-gray-600 mb-1">Starting amount</div>
             <div className="text-2xl font-bold text-gray-700">
@@ -107,9 +107,9 @@ export function PrincipalPanel({
         </div>
 
         {/* Growth multiplier - prominent */}
-        <div className="bg-white/70 rounded-xl p-4 border-2 border-green-300 inline-block">
+        <div className="bg-white/70 rounded-xl p-3 border-2 border-green-300 inline-block">
           <div className="text-sm text-green-700 mb-1">Growth multiplier</div>
-          <div className="text-3xl font-bold text-green-600">
+          <div className="text-2xl font-bold text-green-600">
             {(finalCompound / principal).toFixed(1)}x
           </div>
         </div>
@@ -117,7 +117,7 @@ export function PrincipalPanel({
 
       {/* Editing controls */}
       {isEditing && (
-        <div className="flex items-center justify-center gap-2 mb-4 p-3 bg-white/70 rounded-lg border border-green-300">
+        <div className="flex items-center justify-center gap-2 mb-3 p-3 bg-white/70 rounded-lg border border-green-300">
           <input
             type="number"
             value={editValue}
@@ -136,7 +136,7 @@ export function PrincipalPanel({
       )}
 
       {/* Single metric - extra growth from compounding */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-3">
         <div className="bg-white/70 rounded-lg p-3 border border-green-300 inline-block">
           <div className="text-sm text-gray-600 mb-1">
             Extra growth from compounding

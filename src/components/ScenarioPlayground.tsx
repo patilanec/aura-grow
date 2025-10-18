@@ -57,15 +57,15 @@ export function ScenarioPlayground({
   const strategies = auraStrategies || defaultStrategies
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="card">
         <h2 className="text-lg font-semibold mb-2">Explore Growth Scenarios</h2>
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600 mb-3">
           Move the sliders and see how time and interest rate change your
           outcome. Compounding means your gains also earn gains — small
           percentages make a big difference over years.
         </p>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-medium text-blue-900">
               Example annual rates to help you understand how compounding works
@@ -102,7 +102,7 @@ export function ScenarioPlayground({
         </div>
 
         {/* Rate Selection */}
-        <div className="mb-6">
+        <div className="mb-4">
           <div className="flex gap-2">
             {([4, 11, 21] as const).map((rate) => (
               <button
@@ -128,7 +128,7 @@ export function ScenarioPlayground({
 
         {/* Years Slider */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Time Period: {years} {years === 1 ? 'year' : 'years'}
           </label>
           <input
