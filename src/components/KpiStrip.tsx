@@ -18,8 +18,7 @@ export function KpiStrip({ principal, ratePct, years }: KpiStripProps) {
       {/* Main compound result - WOW factor */}
       <div className="card text-center bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
         <div className="text-lg font-semibold text-green-800 mb-2">
-          🚀 Your balance after {years} {years === 1 ? 'year' : 'years'} with
-          compound growth
+          🚀 Balance after {years} {years === 1 ? 'year' : 'years'} (compound)
         </div>
         <div className="text-4xl font-bold text-green-600 mb-2">
           {formatCurrency(finalCompound)}
@@ -33,19 +32,19 @@ export function KpiStrip({ principal, ratePct, years }: KpiStripProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="card text-center">
           <div className="text-sm text-gray-600 mb-1">
-            Extra growth thanks to compounding
+            Balance after {years} {years === 1 ? 'year' : 'years'} (simple)
           </div>
           <div className="text-2xl font-bold text-blue-600">
-            {formatCurrency(upliftAbs)}
+            {formatCurrency(finalSimple)}
           </div>
         </div>
 
         <div className="card text-center">
           <div className="text-sm text-gray-600 mb-1">
-            Compounding advantage
+            Extra growth from compounding
           </div>
           <div className="text-2xl font-bold text-purple-600">
-            {formatPercent(upliftPct)}
+            {formatCurrency(upliftAbs)}
           </div>
         </div>
       </div>

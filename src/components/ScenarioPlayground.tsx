@@ -63,9 +63,7 @@ export function ScenarioPlayground({
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-medium text-blue-900">
-              {auraStrategies
-                ? 'Your Personalized Strategies from AURA:'
-                : 'Realistic Crypto Strategies:'}
+              Example annual rates to help you understand how compounding works
             </h4>
             {strategiesLoading && (
               <div className="text-xs text-blue-600">Loading strategies...</div>
@@ -73,19 +71,19 @@ export function ScenarioPlayground({
           </div>
           <ul className="text-sm text-blue-800 space-y-1">
             <li>
-              <strong>4% (Stable Yields):</strong>{' '}
+              <strong>4% (conservative):</strong>{' '}
               {strategies.low.length > 0
                 ? strategies.low[0]
                 : 'Lido staking, USDC lending — lower risk, steady returns'}
             </li>
             <li>
-              <strong>11% (DeFi Pools):</strong>{' '}
+              <strong>11% (balanced):</strong>{' '}
               {strategies.moderate.length > 0
                 ? strategies.moderate[0]
                 : 'Aave, Balancer, Uniswap — moderate risk, proven protocols'}
             </li>
             <li>
-              <strong>21% (Aggressive Farming):</strong>{' '}
+              <strong>21% (aggressive):</strong>{' '}
               {strategies.high.length > 0
                 ? strategies.high[0]
                 : 'Yield vaults, LSDfi — higher risk, bull market opportunities'}
@@ -100,9 +98,6 @@ export function ScenarioPlayground({
 
         {/* Rate Selection */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Annual Growth Rate (examples to learn from)
-          </label>
           <div className="flex gap-2">
             {([4, 11, 21] as const).map((rate) => (
               <button
@@ -117,10 +112,10 @@ export function ScenarioPlayground({
               >
                 {rate}%{' '}
                 {rate === 4
-                  ? '(stable yields)'
+                  ? '(conservative)'
                   : rate === 11
-                    ? '(DeFi pools)'
-                    : '(aggressive farming)'}
+                    ? '(balanced)'
+                    : '(aggressive)'}
               </button>
             ))}
           </div>

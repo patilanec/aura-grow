@@ -29,21 +29,18 @@ export function ErrorCard({
         </div>
         <div className="ml-3 flex-1">
           <h3 className="text-sm font-medium text-red-800">
-            Couldn't Load from AURA
+            Couldn't load from AURA
           </h3>
           <p className="mt-1 text-sm text-red-700">{message}</p>
           <p className="mt-2 text-sm text-gray-600">
-            Don't worry — you can still explore how compound interest works!
+            Try again later or enter a manual amount to continue learning.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <button onClick={onRetry} className="btn-primary text-sm">
-              Try Again
+              Retry
             </button>
             <button onClick={onUseManual} className="btn-secondary text-sm">
-              Use Manual Amount & Keep Learning
-            </button>
-            <button onClick={onChangeAddress} className="btn-secondary text-sm">
-              Try Different Address
+              Enter manually
             </button>
           </div>
         </div>

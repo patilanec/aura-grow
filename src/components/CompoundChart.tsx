@@ -26,7 +26,7 @@ export function CompoundChart({ data }: CompoundChartProps) {
   return (
     <div className="card">
       <h3 className="text-lg font-semibold mb-4">
-        How Your Balance Could Grow Over Time
+        How your balance could grow over time
       </h3>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
@@ -46,7 +46,7 @@ export function CompoundChart({ data }: CompoundChartProps) {
               dataKey="simple"
               stroke="#6b7280"
               strokeWidth={2}
-              name="Simple Growth"
+              name="Simple growth"
               dot={false}
             />
             <Line
@@ -54,7 +54,7 @@ export function CompoundChart({ data }: CompoundChartProps) {
               dataKey="compound"
               stroke="#10b981"
               strokeWidth={2}
-              name="Compound Growth"
+              name="Compound growth"
               dot={false}
             />
           </LineChart>

@@ -37,9 +37,7 @@ export function AddressInput({ onSubmit, loading = false }: AddressInputProps) {
 
   return (
     <div className="card">
-      <h2 className="text-lg font-semibold mb-2">
-        Start Your Learning Journey
-      </h2>
+      <h2 className="text-lg font-semibold mb-2">Ready to explore?</h2>
       <p className="text-gray-600 mb-4">
         Connect your wallet or enter your address to fetch your total balance
         from AURA. We'll use it as your starting point to explore how compound
@@ -81,7 +79,7 @@ export function AddressInput({ onSubmit, loading = false }: AddressInputProps) {
             htmlFor="address"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Enter Wallet Address Manually
+            Enter wallet address manually
           </label>
           <input
             id="address"
@@ -91,6 +89,7 @@ export function AddressInput({ onSubmit, loading = false }: AddressInputProps) {
             placeholder="0x... or ENS name"
             className="input-field"
             disabled={loading}
+            aria-label="Enter wallet address"
           />
         </div>
         <button
@@ -98,11 +97,13 @@ export function AddressInput({ onSubmit, loading = false }: AddressInputProps) {
           disabled={loading || !address.trim()}
           className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading
-            ? 'Loading from AURA...'
-            : 'Load My Balance & Start Learning'}
+          {loading ? 'Loading from AURA...' : 'Enter manually'}
         </button>
       </form>
+
+      <p className="text-xs text-gray-500 mt-3 text-center">
+        No transactions are made. This is a learning simulation.
+      </p>
     </div>
   )
 }

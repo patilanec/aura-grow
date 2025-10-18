@@ -60,7 +60,8 @@ export function WalletConnect({
       </div>
 
       <p className="text-gray-600 mb-6">
-        Choose a wallet to connect and automatically load your balance:
+        Choose a wallet to connect and automatically load your balance from
+        AURA:
       </p>
 
       {error && (
@@ -113,8 +114,7 @@ export function WalletConnect({
 
       <div className="mt-6 pt-4 border-t border-gray-200">
         <p className="text-xs text-gray-500 text-center">
-          By connecting your wallet, you agree to our terms of service. We only
-          read your balance - no transactions are required.
+          We only read your balance from AURA - no transactions are required.
         </p>
       </div>
     </div>

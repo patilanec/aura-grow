@@ -41,7 +41,7 @@ export function PrincipalPanel({
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-600">
-                Starting Balance
+                Starting amount: {formatCurrency(principal)}
               </span>
               <span
                 className={`px-2 py-1 text-xs rounded-full ${
@@ -50,7 +50,7 @@ export function PrincipalPanel({
                     : 'bg-gray-100 text-gray-800'
                 }`}
               >
-                {source === 'AURA' ? 'From AURA' : 'Manual'}
+                {source === 'AURA' ? 'Loaded from AURA' : 'Manual amount'}
               </span>
               {isWalletConnected && (
                 <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
@@ -59,7 +59,7 @@ export function PrincipalPanel({
               )}
               {cached && (
                 <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                  loaded from cache
+                  cached
                 </span>
               )}
             </div>
@@ -105,6 +105,10 @@ export function PrincipalPanel({
           )}
         </div>
       </div>
+
+      <p className="text-xs text-gray-500 mt-3">
+        This simulation is for educational purposes only — not financial advice.
+      </p>
     </div>
   )
 }
