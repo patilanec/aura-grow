@@ -79,7 +79,6 @@ export function ScenarioPlayground({ address }: ScenarioPlaygroundProps) {
   const renderStrategyCard = (
     rate: number,
     label: string,
-    riskLevel: 'low' | 'moderate' | 'high',
     strategies: StrategyData[]
   ) => {
     const primaryStrategy = strategies[0]
@@ -186,14 +185,9 @@ export function ScenarioPlayground({ address }: ScenarioPlaygroundProps) {
           </div>
 
           <div className="grid gap-3">
-            {renderStrategyCard(4, 'conservative', 'low', strategies.low)}
-            {renderStrategyCard(
-              11,
-              'balanced',
-              'moderate',
-              strategies.moderate
-            )}
-            {renderStrategyCard(21, 'aggressive', 'high', strategies.high)}
+            {renderStrategyCard(4, 'conservative', strategies.low)}
+            {renderStrategyCard(11, 'balanced', strategies.moderate)}
+            {renderStrategyCard(21, 'aggressive', strategies.high)}
           </div>
 
           <div className="mt-3 pt-3 border-t border-blue-200">

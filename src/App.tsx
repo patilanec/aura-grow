@@ -325,7 +325,7 @@ function AppContent() {
                   with your real crypto portfolio
                 </p>
                 <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                  Powered by AdEx AURA — we use your wallet balance as a
+                  Powered by AdEx AURA - we use your wallet balance as a
                   starting point to visualize how time amplifies growth.
                 </p>
               </div>
@@ -584,11 +584,11 @@ function AppContent() {
           </main>
 
           {/* Footer */}
-          <footer className="mt-4 text-center text-sm text-gray-500 space-y-4">
+          <footer className="text-center text-sm text-gray-500 space-y-4">
             <div className="pt-1 pb-4">
               <p className="text-gray-600">
                 This is an educational tool powered by AdEx AURA. It's not
-                financial advice — it's here to help you understand how time and
+                financial advice - it's here to help you understand how time and
                 interest shape results.
               </p>
               {state.principalUsd && (
