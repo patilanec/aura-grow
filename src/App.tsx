@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAccount, useDisconnect } from 'wagmi'
 import { getPrincipalUsd } from './lib/aura'
+import { getCache } from './lib/cache'
 import { AddressInput } from './components/AddressInput'
 import { PrincipalPanel } from './components/PrincipalPanel'
 import { ScenarioPlayground } from './components/ScenarioPlayground'
@@ -35,11 +36,20 @@ function AppContent() {
         const parsed = JSON.parse(saved)
         // Restore state if we have an address
         if (parsed.address) {
+          // Check if we have valid cached data for this address
+          let cached = false
+          if (parsed.source === 'AURA') {
+            const apiKey = import.meta.env.VITE_AURA_API_KEY
+            const cacheKey = `balances:${parsed.address}:${apiKey ?? ''}`
+            const cachedData = getCache(cacheKey)
+            cached = cachedData !== null
+          }
+
           return {
             address: parsed.address,
             principalUsd: parsed.principalUsd,
             source: parsed.source || 'Manual',
-            cached: false, // Reset cache status
+            cached,
             loading: false,
             error: null,
             isWalletConnected: parsed.isWalletConnected || false,
