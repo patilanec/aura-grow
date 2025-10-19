@@ -184,14 +184,44 @@ export async function getPrincipalUsd(
 }
 
 export function extractStrategiesByRisk(data: AuraStrategiesResponse): {
-  low: string[]
-  moderate: string[]
-  high: string[]
+  low: Array<{
+    name: string
+    apy?: string
+    platforms?: string[]
+    description?: string
+  }>
+  moderate: Array<{
+    name: string
+    apy?: string
+    platforms?: string[]
+    description?: string
+  }>
+  high: Array<{
+    name: string
+    apy?: string
+    platforms?: string[]
+    description?: string
+  }>
 } {
   const strategies = {
-    low: [] as string[],
-    moderate: [] as string[],
-    high: [] as string[],
+    low: [] as Array<{
+      name: string
+      apy?: string
+      platforms?: string[]
+      description?: string
+    }>,
+    moderate: [] as Array<{
+      name: string
+      apy?: string
+      platforms?: string[]
+      description?: string
+    }>,
+    high: [] as Array<{
+      name: string
+      apy?: string
+      platforms?: string[]
+      description?: string
+    }>,
   }
 
   if (!data?.strategies?.[0]?.response) {
@@ -202,15 +232,28 @@ export function extractStrategiesByRisk(data: AuraStrategiesResponse): {
     const risk = strategy.risk
     const name = strategy.name
 
-    if (risk === 'low' && strategies.low.length < 2) {
-      strategies.low.push(name)
-    } else if (risk === 'moderate' && strategies.moderate.length < 2) {
-      strategies.moderate.push(name)
+    // Extract additional details from the first action if available
+    const firstAction = strategy.actions?.[0]
+    const apy = firstAction?.apy
+    const platforms = firstAction?.platforms?.map((p) => p.name) || []
+    const description = firstAction?.description
+
+    const strategyData = {
+      name,
+      apy,
+      platforms,
+      description,
+    }
+
+    if (risk === 'low' && strategies.low.length < 3) {
+      strategies.low.push(strategyData)
+    } else if (risk === 'moderate' && strategies.moderate.length < 3) {
+      strategies.moderate.push(strategyData)
     } else if (
       (risk === 'high' || risk === 'opportunistic') &&
-      strategies.high.length < 2
+      strategies.high.length < 3
     ) {
-      strategies.high.push(name)
+      strategies.high.push(strategyData)
     }
   }
 
