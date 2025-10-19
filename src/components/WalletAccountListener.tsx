@@ -1,27 +1,30 @@
 import { useEffect, useRef } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 
 interface WalletAccountListenerProps {
   onAddressChange: (address: string) => void
   currentAddress: string
   isWalletConnected: boolean
   isChangingAddress: boolean
+  onDisconnect?: () => void
 }
 
 export function WalletAccountListener({
   onAddressChange,
   currentAddress,
-  isWalletConnected: _isWalletConnected,
+  isWalletConnected,
   isChangingAddress,
+  onDisconnect,
 }: WalletAccountListenerProps) {
   const { address, isConnected } = useAccount()
+  const { disconnect } = useDisconnect()
   const lastProcessedAddress = useRef<string>('')
   const isProcessing = useRef<boolean>(false)
   const processedInThisSession = useRef<Set<string>>(new Set())
 
   useEffect(() => {
-    // Prevent any processing if we're already processing or changing address
-    if (isProcessing.current || isChangingAddress) {
+    // Prevent any processing if we're already processing, changing address, or wallet is not connected
+    if (isProcessing.current || isChangingAddress || !isWalletConnected) {
       return
     }
 
@@ -48,7 +51,14 @@ export function WalletAccountListener({
         isProcessing.current = false
       }, 0)
     }
-  }, [address, isConnected, currentAddress, isChangingAddress, onAddressChange])
+  }, [
+    address,
+    isConnected,
+    currentAddress,
+    isChangingAddress,
+    isWalletConnected,
+    onAddressChange,
+  ])
 
   // Reset when current address changes
   useEffect(() => {
@@ -58,6 +68,22 @@ export function WalletAccountListener({
       processedInThisSession.current.clear()
     }
   }, [currentAddress])
+
+  // Clear processed addresses when wallet is disconnected
+  useEffect(() => {
+    if (!isWalletConnected) {
+      processedInThisSession.current.clear()
+      lastProcessedAddress.current = ''
+    }
+  }, [isWalletConnected])
+
+  // Disconnect wallet when isWalletConnected becomes false
+  useEffect(() => {
+    if (!isWalletConnected && isConnected) {
+      disconnect()
+      onDisconnect?.()
+    }
+  }, [isWalletConnected, isConnected, disconnect, onDisconnect])
 
   // This component doesn't render anything
   return null

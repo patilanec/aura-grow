@@ -131,6 +131,19 @@ function App() {
     }))
   }
 
+  const handleDisconnectWallet = () => {
+    setState((prev) => ({
+      ...prev,
+      address: '',
+      principalUsd: null,
+      source: 'Manual',
+      cached: false,
+      error: null,
+      isWalletConnected: false,
+      isChangingAddress: false,
+    }))
+  }
+
   // Handle wallet address changes
   const handleWalletAddressChange = (newAddress: string) => {
     // Only process if the address is actually different from current
@@ -167,10 +180,14 @@ function App() {
         currentAddress={state.address}
         isWalletConnected={state.isWalletConnected}
         isChangingAddress={state.isChangingAddress}
+        onDisconnect={() => {
+          // Additional cleanup if needed
+          console.log('Wallet disconnected')
+        }}
       />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-        {/* Show hero section only when no address is connected */}
-        {!state.address && (
+        {/* Show hero section only when no address is connected or when changing address */}
+        {(!state.address || state.isChangingAddress) && (
           <div className="relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-green-600/10"></div>
             <div className="relative container mx-auto px-4 py-12 max-w-6xl">
@@ -197,10 +214,14 @@ function App() {
               {/* Ready to Explore Section - Call to Action */}
               <div className="text-center mb-20">
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
-                  Ready to explore?
+                  {state.isChangingAddress
+                    ? 'Enter new address'
+                    : 'Ready to explore?'}
                 </h2>
                 <p className="text-sm text-gray-600 mb-4 max-w-lg mx-auto">
-                  Connect your wallet or enter your address to get started
+                  {state.isChangingAddress
+                    ? 'Enter a new wallet address to explore different scenarios'
+                    : 'Connect your wallet or enter your address to get started'}
                 </p>
 
                 {/* Integrated Form */}
@@ -209,6 +230,23 @@ function App() {
                     onSubmit={handleAddressSubmit}
                     loading={state.loading}
                   />
+
+                  {/* Cancel button when changing address */}
+                  {state.isChangingAddress && (
+                    <div className="mt-3">
+                      <button
+                        onClick={() =>
+                          setState((prev) => ({
+                            ...prev,
+                            isChangingAddress: false,
+                          }))
+                        }
+                        className="text-sm text-gray-600 hover:text-gray-800 underline"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Trust Indicators */}
@@ -360,10 +398,16 @@ function App() {
                     {state.address.slice(0, 6)}...{state.address.slice(-4)}
                   </div>
                   <button
-                    onClick={handleChangeAddress}
+                    onClick={
+                      state.isWalletConnected
+                        ? handleDisconnectWallet
+                        : handleChangeAddress
+                    }
                     className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
                   >
-                    Change Address
+                    {state.isWalletConnected
+                      ? 'Disconnect Wallet'
+                      : 'Change Address'}
                   </button>
                 </div>
               </div>
