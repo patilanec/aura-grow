@@ -8,12 +8,7 @@ interface ScenarioPlaygroundProps {
   years: number
 }
 
-export function ScenarioPlayground({
-  principalUsd,
-  address,
-  ratePct,
-  years,
-}: ScenarioPlaygroundProps) {
+export function ScenarioPlayground({ address }: ScenarioPlaygroundProps) {
   const [auraStrategies, setAuraStrategies] = useState<{
     low: string[]
     moderate: string[]

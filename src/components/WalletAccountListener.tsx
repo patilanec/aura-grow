@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 interface WalletAccountListenerProps {
   onAddressChange: (address: string) => void
@@ -14,10 +14,8 @@ export function WalletAccountListener({
   currentAddress,
   isWalletConnected,
   isChangingAddress,
-  onDisconnect,
 }: WalletAccountListenerProps) {
   const { address, isConnected } = useAccount()
-  const { disconnect } = useDisconnect()
   const lastProcessedAddress = useRef<string>('')
   const isProcessing = useRef<boolean>(false)
   const processedInThisSession = useRef<Set<string>>(new Set())

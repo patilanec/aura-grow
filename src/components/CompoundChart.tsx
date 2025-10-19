@@ -7,7 +7,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Cell,
 } from 'recharts'
 import { formatCurrency } from '../lib/format'
 
@@ -22,8 +21,6 @@ interface CompoundChartProps {
 }
 
 export function CompoundChart({ data }: CompoundChartProps) {
-  const formatTooltipValue = (value: number) => formatCurrency(value)
-
   // Calculate the extra growth from compounding
   const dataWithExtra = data.map((point) => ({
     ...point,
