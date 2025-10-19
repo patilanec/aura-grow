@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import { makeSeries } from '../lib/compound'
 import { getAuraStrategies } from '../lib/aura'
-import { CompoundChart } from './CompoundChart'
 
 interface ScenarioPlaygroundProps {
   principalUsd: number
@@ -26,8 +24,6 @@ export function ScenarioPlayground({
     high: string[]
   } | null>(null)
   const [strategiesLoading, setStrategiesLoading] = useState(false)
-
-  const data = makeSeries(principalUsd, ratePct, years)
 
   // Fetch AURA strategies when address is available
   useEffect(() => {
@@ -145,8 +141,6 @@ export function ScenarioPlayground({
           </div>
         </div>
       </div>
-
-      <CompoundChart data={data} />
     </div>
   )
 }

@@ -38,25 +38,8 @@ export function CompoundChart({ data }: CompoundChartProps) {
           💎 The Magic of Compound Interest
         </h3>
         <p className="text-gray-600 mb-6 text-sm">
-          Watch how your money grows exponentially over time
+          Visualize the power of compound interest over time
         </p>
-
-        {/* Floating stats overlay - moved above chart */}
-        <div className="mb-4 flex justify-center">
-          <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-white/20">
-            <div className="text-xs text-gray-600 mb-1">
-              Final Year Comparison
-            </div>
-            <div className="text-sm font-bold text-green-600">
-              +
-              {(
-                (data[data.length - 1]?.compound / (data[0]?.simple || 1) - 1) *
-                100
-              ).toFixed(0)}
-              %<span className="text-gray-500 text-xs ml-1">total growth</span>
-            </div>
-          </div>
-        </div>
 
         <div className="h-80 relative">
           <ResponsiveContainer width="100%" height="100%">
@@ -253,32 +236,6 @@ export function CompoundChart({ data }: CompoundChartProps) {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-
-        {/* Key insights */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600 mb-1">
-              {formatCurrency(data[0]?.simple || 0)}
-            </div>
-            <div className="text-sm text-blue-800">Initial Investment</div>
-          </div>
-
-          <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-            <div className="text-2xl font-bold text-green-600 mb-1">
-              {formatCurrency(
-                (data[data.length - 1]?.compound || 0) - (data[0]?.simple || 0)
-              )}
-            </div>
-            <div className="text-sm text-green-800">Extra from Compounding</div>
-          </div>
-
-          <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-            <div className="text-2xl font-bold text-purple-600 mb-1">
-              {formatCurrency(data[data.length - 1]?.compound || 0)}
-            </div>
-            <div className="text-sm text-purple-800">Final Value</div>
-          </div>
         </div>
       </div>
     </div>
