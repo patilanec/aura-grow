@@ -395,7 +395,9 @@ function App() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="text-sm text-gray-600 font-mono">
-                    {state.address.slice(0, 6)}...{state.address.slice(-4)}
+                    {state.address.includes('.eth')
+                      ? state.address
+                      : `${state.address.slice(0, 6)}...${state.address.slice(-4)}`}
                   </div>
                   <button
                     onClick={
