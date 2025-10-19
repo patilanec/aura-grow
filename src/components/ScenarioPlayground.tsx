@@ -158,10 +158,11 @@ export function ScenarioPlayground({ address }: ScenarioPlaygroundProps) {
       <div className="card">
         <h2 className="text-lg font-semibold mb-2">Explore Growth Scenarios</h2>
         <p className="text-gray-600 mb-4">
-          Leveraging AdEx AURA insights, it demonstrates how small changes in
-          interest rates can compound into substantial gains over time. Move the
-          sliders to explore different scenarios and see the power of
-          compounding with your real portfolio data.
+          You can now see how varying APY rates (4%, 11%, 21%) dramatically
+          affect long-term returns. The panel below presents real strategies
+          powered by AdEx AURA - personalized for your address or shown as
+          educational examples to illustrate the power of compound interest in
+          decentralized finance.
         </p>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
