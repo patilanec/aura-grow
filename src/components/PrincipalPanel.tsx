@@ -20,6 +20,8 @@ interface PrincipalPanelProps {
   ratePct: 4 | 11 | 21
   years: number
   onUpdatePrincipal: (newPrincipal: number) => void
+  onRatePctChange: (ratePct: 4 | 11 | 21) => void
+  onYearsChange: (years: number) => void
 }
 
 export function PrincipalPanel({
@@ -30,6 +32,8 @@ export function PrincipalPanel({
   ratePct,
   years,
   onUpdatePrincipal,
+  onRatePctChange,
+  onYearsChange,
 }: PrincipalPanelProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(principal.toString())
@@ -348,6 +352,62 @@ export function PrincipalPanel({
               />
             </AreaChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Interactive controls */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold mb-4 text-center text-gray-800">
+          🎛️ Explore Growth Scenarios
+        </h3>
+
+        {/* Rate Selection */}
+        <div className="mb-4">
+          <div className="text-sm font-medium text-gray-700 mb-3 text-center">
+            Choose your annual interest rate:
+          </div>
+          <div className="flex gap-2 justify-center">
+            {([4, 11, 21] as const).map((rate) => (
+              <button
+                key={rate}
+                onClick={() => onRatePctChange(rate)}
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  ratePct === rate
+                    ? 'bg-blue-600 text-white shadow-lg transform scale-105'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300 hover:shadow-md'
+                }`}
+                title={`${rate}% annual rate - ${rate === 4 ? 'stable yields (Lido, USDC lending)' : rate === 11 ? 'DeFi pools (Aave, Balancer)' : 'aggressive farming (vaults, LSDfi)'}`}
+              >
+                {rate}%{' '}
+                {rate === 4
+                  ? '(conservative)'
+                  : rate === 11
+                    ? '(balanced)'
+                    : '(aggressive)'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Years Slider */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2 text-center">
+            Time Period: {years} {years === 1 ? 'year' : 'years'}
+          </label>
+          <div className="max-w-md mx-auto">
+            <input
+              type="range"
+              min="1"
+              max="35"
+              value={years}
+              onChange={(e) => onYearsChange(parseInt(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>1 year</span>
+              <span>35 years</span>
+            </div>
+          </div>
         </div>
       </div>
 

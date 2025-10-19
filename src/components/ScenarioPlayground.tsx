@@ -6,8 +6,6 @@ interface ScenarioPlaygroundProps {
   address?: string
   ratePct: 4 | 11 | 21
   years: number
-  onRatePctChange: (ratePct: 4 | 11 | 21) => void
-  onYearsChange: (years: number) => void
 }
 
 export function ScenarioPlayground({
@@ -15,8 +13,6 @@ export function ScenarioPlayground({
   address,
   ratePct,
   years,
-  onRatePctChange,
-  onYearsChange,
 }: ScenarioPlaygroundProps) {
   const [auraStrategies, setAuraStrategies] = useState<{
     low: string[]
@@ -95,50 +91,6 @@ export function ScenarioPlayground({
               ✨ Strategies personalized based on your portfolio
             </div>
           )}
-        </div>
-
-        {/* Rate Selection */}
-        <div className="mb-4">
-          <div className="flex gap-2">
-            {([4, 11, 21] as const).map((rate) => (
-              <button
-                key={rate}
-                onClick={() => onRatePctChange(rate)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  ratePct === rate
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-                title={`${rate}% annual rate - ${rate === 4 ? 'stable yields (Lido, USDC lending)' : rate === 11 ? 'DeFi pools (Aave, Balancer)' : 'aggressive farming (vaults, LSDfi)'}`}
-              >
-                {rate}%{' '}
-                {rate === 4
-                  ? '(conservative)'
-                  : rate === 11
-                    ? '(balanced)'
-                    : '(aggressive)'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Years Slider */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Time Period: {years} {years === 1 ? 'year' : 'years'}
-          </label>
-          <input
-            type="range"
-            min="1"
-            max="35"
-            value={years}
-            onChange={(e) => onYearsChange(parseInt(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-          />
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>1 year</span>
-            <span>35 years</span>
-          </div>
         </div>
       </div>
     </div>

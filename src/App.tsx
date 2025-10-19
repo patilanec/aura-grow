@@ -403,6 +403,8 @@ function App() {
                   ratePct={state.ratePct}
                   years={state.years}
                   onUpdatePrincipal={handleUpdatePrincipal}
+                  onRatePctChange={handleUpdateRatePct}
+                  onYearsChange={handleUpdateYears}
                 />
 
                 <ScenarioPlayground
@@ -410,8 +412,6 @@ function App() {
                   address={state.address}
                   ratePct={state.ratePct}
                   years={state.years}
-                  onRatePctChange={handleUpdateRatePct}
-                  onYearsChange={handleUpdateYears}
                 />
               </div>
             )}
