@@ -55,3 +55,36 @@ export function setCache<T>(
     console.warn('Failed to write to localStorage cache:', error)
   }
 }
+
+export function getCacheTimestamp(key: string): number | null {
+  // Check memory cache first
+  const memoryEntry = memoryCache.get(key)
+  if (memoryEntry) {
+    return memoryEntry.at
+  }
+
+  // Check localStorage
+  try {
+    const stored = localStorage.getItem(`cache:${key}`)
+    if (stored) {
+      const entry: CacheEntry<any> = JSON.parse(stored)
+      return entry.at
+    }
+  } catch (error) {
+    console.warn('Failed to read cache timestamp from localStorage:', error)
+  }
+
+  return null
+}
+
+export function clearCache(key: string): void {
+  // Remove from memory cache
+  memoryCache.delete(key)
+
+  // Remove from localStorage
+  try {
+    localStorage.removeItem(`cache:${key}`)
+  } catch (error) {
+    console.warn('Failed to remove from localStorage cache:', error)
+  }
+}

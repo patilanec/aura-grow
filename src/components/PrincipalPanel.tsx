@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { formatCurrency } from '../lib/format'
+import { useState, useEffect } from 'react'
+import { formatCurrency, formatTimeAgo } from '../lib/format'
 import { simpleGrowth, compoundGrowth, makeSeries } from '../lib/compound'
+import { getCacheInfo, refetchAuraData } from '../lib/aura'
 import {
   AreaChart,
   Area,
@@ -19,6 +20,7 @@ interface PrincipalPanelProps {
   isWalletConnected?: boolean
   ratePct: 4 | 11 | 21
   years: number
+  address?: string
   onUpdatePrincipal: (newPrincipal: number) => void
   onRatePctChange: (ratePct: 4 | 11 | 21) => void
   onYearsChange: (years: number) => void
@@ -31,12 +33,15 @@ export function PrincipalPanel({
   isWalletConnected = false,
   ratePct,
   years,
+  address,
   onUpdatePrincipal,
   onRatePctChange,
   onYearsChange,
 }: PrincipalPanelProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(principal.toString())
+  const [isRefetching, setIsRefetching] = useState(false)
+  const [lastFetched, setLastFetched] = useState<number | null>(null)
 
   // Calculate compound growth for wow effect
   const finalCompound = compoundGrowth(principal, ratePct, years)
@@ -50,6 +55,34 @@ export function PrincipalPanel({
     invested: data[0]?.simple || 0, // Always show the initial investment amount
     extraGrowth: point.compound - (data[0]?.simple || 0), // Extra growth from compounding
   }))
+
+  // Get cache info when address changes
+  useEffect(() => {
+    if (address && source === 'AURA') {
+      const apiKey = import.meta.env.VITE_AURA_API_KEY
+      const cacheInfo = getCacheInfo(address, apiKey)
+      setLastFetched(cacheInfo.balancesTimestamp)
+    }
+  }, [address, source])
+
+  const handleRefetch = async () => {
+    if (!address || source !== 'AURA' || isRefetching) return
+
+    setIsRefetching(true)
+    try {
+      const apiKey = import.meta.env.VITE_AURA_API_KEY
+      const result = await refetchAuraData(address, apiKey)
+
+      if (result.principal !== null) {
+        onUpdatePrincipal(result.principal)
+        setLastFetched(Date.now())
+      }
+    } catch (error) {
+      console.error('Failed to refetch AURA data:', error)
+    } finally {
+      setIsRefetching(false)
+    }
+  }
 
   const handleSave = () => {
     const numValue = parseFloat(editValue)
@@ -94,9 +127,26 @@ export function PrincipalPanel({
             </span>
           )}
           {cached && (
-            <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 font-medium">
-              ⚡ Cached
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 font-medium">
+                ⚡ Cached
+              </span>
+              {lastFetched && (
+                <span className="text-xs text-gray-500">
+                  {formatTimeAgo(lastFetched)}
+                </span>
+              )}
+              {address && source === 'AURA' && (
+                <button
+                  onClick={handleRefetch}
+                  disabled={isRefetching}
+                  className="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Refresh data from AURA API"
+                >
+                  {isRefetching ? '🔄' : '↻'} Refetch
+                </button>
+              )}
+            </div>
           )}
         </div>
       </div>

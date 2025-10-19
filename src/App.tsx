@@ -402,6 +402,7 @@ function App() {
                   isWalletConnected={state.isWalletConnected}
                   ratePct={state.ratePct}
                   years={state.years}
+                  address={state.address}
                   onUpdatePrincipal={handleUpdatePrincipal}
                   onRatePctChange={handleUpdateRatePct}
                   onYearsChange={handleUpdateYears}

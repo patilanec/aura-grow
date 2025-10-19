@@ -1,4 +1,4 @@
-import { getCache, setCache } from './cache'
+import { getCache, setCache, getCacheTimestamp, clearCache } from './cache'
 
 export type AuraBalancesResponse = unknown
 
@@ -247,5 +247,62 @@ export async function getAuraStrategies(
       strategies: { low: [], moderate: [], high: [] },
       cached: false,
     }
+  }
+}
+
+export function getCacheInfo(
+  address: string,
+  apiKey?: string
+): {
+  balancesTimestamp: number | null
+  strategiesTimestamp: number | null
+} {
+  const balancesKey = `balances:${address}:${apiKey ?? ''}`
+  const strategiesKey = `strategies:${address}:${apiKey ?? ''}`
+
+  return {
+    balancesTimestamp: getCacheTimestamp(balancesKey),
+    strategiesTimestamp: getCacheTimestamp(strategiesKey),
+  }
+}
+
+export async function refetchAuraData(
+  address: string,
+  apiKey?: string
+): Promise<{
+  principal: number | null
+  strategies: ReturnType<typeof extractStrategiesByRisk>
+  responseTimeMs: number
+}> {
+  const balancesKey = `balances:${address}:${apiKey ?? ''}`
+  const strategiesKey = `strategies:${address}:${apiKey ?? ''}`
+
+  // Clear existing cache
+  clearCache(balancesKey)
+  clearCache(strategiesKey)
+
+  const startTime = Date.now()
+
+  // Fetch both in parallel
+  const [balancesResult, strategiesResult] = await Promise.allSettled([
+    getPrincipalUsd(address, apiKey),
+    getAuraStrategies(address, apiKey),
+  ])
+
+  const responseTimeMs = Date.now() - startTime
+
+  const principal =
+    balancesResult.status === 'fulfilled'
+      ? balancesResult.value.principal
+      : null
+  const strategies =
+    strategiesResult.status === 'fulfilled'
+      ? strategiesResult.value.strategies
+      : { low: [], moderate: [], high: [] }
+
+  return {
+    principal,
+    strategies,
+    responseTimeMs,
   }
 }
