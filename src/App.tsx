@@ -584,12 +584,11 @@ function AppContent() {
           </main>
 
           {/* Footer */}
-          <footer className="text-center text-sm text-gray-500 space-y-4">
+          <footer className="mt-4 text-center text-sm text-gray-500 space-y-4">
             <div className="pt-1 pb-4">
               <p className="text-gray-600">
-                This is an educational tool powered by AdEx AURA. It's not
-                financial advice - it's here to help you understand how time and
-                interest shape results.
+                AdEx AURA powered educational dapp that visualizes how time and
+                interest shape your crypto growth.
               </p>
               {state.principalUsd && (
                 <p className="mt-2 text-gray-500">
