@@ -1,13 +1,17 @@
 # Aura Grow
 
-A tiny educational app that visualizes compound vs simple interest growth using your wallet balance as the initial principal.
+AdEx AURA powered educational dapp that visualizes how time and interest shape your crypto growth.
+
+Aura Grow is an educational dapp that demonstrates the power of compound interest using real data from the AdEx AURA API. It fetches your total wallet balance and uses it as the starting point to simulate how time and interest rates affect long-term growth.
+
+Leveraging AdEx AURA insights, it demonstrates how small changes in interest rates can compound into substantial gains over time.
 
 ## Features
 
 - **Web3 Wallet Connection**: Connect directly with popular wallets (MetaMask, Coinbase Wallet, WalletConnect)
 - **Auto Wallet Sync**: Automatically updates when you switch accounts in your connected wallet
 - **Wallet Integration**: Fetches total USD balance from AdEx AURA API using any EVM address or ENS name
-- **Interactive Scenarios**: Compare compound vs simple interest across different rates (3%, 6%, 10%) and time periods (1-10 years)
+- **Interactive Scenarios**: Explore compound interest growth across different rates (conservative, balanced, aggressive) and time periods (up to 35 years)
 - **Real-time Visualization**: Clean line chart showing growth over time
 - **Smart Caching**: 1-hour cache for API responses to improve performance
 - **Fallback Options**: Manual amount input when API is unavailable
@@ -45,7 +49,7 @@ A tiny educational app that visualizes compound vs simple interest growth using 
 2. **Manual Entry**: Alternatively, enter an EVM wallet address (0x...) or ENS name manually
 3. The app fetches your total USD balance from AdEx AURA
 4. Use the scenario controls to explore different interest rates and time periods
-5. Compare simple vs compound interest growth in the interactive chart
+5. Watch your starting balance grow over time in the interactive chart
 
 ## API Integration
 
@@ -63,6 +67,11 @@ The app integrates with the AdEx AURA API to fetch wallet balances:
 - **Charts**: Recharts
 - **State**: Local component state (no Redux)
 - **Linting**: ESLint + Prettier
+
+## Links
+
+- **AdEx AURA Hackathon**: [https://guide.adex.network/aura-hackathon](https://guide.adex.network/aura-hackathon)
+- **AdEx AURA API**: [https://guide.adex.network/adex-aura-api/introduction](https://guide.adex.network/adex-aura-api/introduction)
 
 ## Disclaimer
 
