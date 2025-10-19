@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useAccount, useDisconnect } from 'wagmi'
 import { getPrincipalUsd } from './lib/aura'
 import { AddressInput } from './components/AddressInput'
 import { PrincipalPanel } from './components/PrincipalPanel'
@@ -23,20 +24,111 @@ interface AppState {
   years: number
 }
 
-function App() {
-  const [state, setState] = useState<AppState>({
-    address: '',
-    principalUsd: null,
-    source: 'Manual',
-    cached: false,
-    loading: false,
-    error: null,
-    isWalletConnected: false,
-    isChangingAddress: false,
-    ratePct: 11,
-    years: 30,
+function AppContent() {
+  const { address: wagmiAddress, isConnected } = useAccount()
+  const { disconnect } = useDisconnect()
+  const [state, setState] = useState<AppState>(() => {
+    // Try to restore state from localStorage on initial load
+    try {
+      const saved = localStorage.getItem('aura-grow-state')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        // Restore state if we have an address
+        if (parsed.address) {
+          return {
+            address: parsed.address,
+            principalUsd: parsed.principalUsd,
+            source: parsed.source || 'Manual',
+            cached: false, // Reset cache status
+            loading: false,
+            error: null,
+            isWalletConnected: parsed.isWalletConnected || false,
+            isChangingAddress: false,
+            ratePct: parsed.ratePct || 11,
+            years: parsed.years || 30,
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to restore state from localStorage:', error)
+    }
+
+    // Default state
+    return {
+      address: '',
+      principalUsd: null,
+      source: 'Manual',
+      cached: false,
+      loading: false,
+      error: null,
+      isWalletConnected: false,
+      isChangingAddress: false,
+      ratePct: 11,
+      years: 30,
+    }
   })
   const isProcessingRef = useRef<boolean>(false)
+
+  // Save state to localStorage whenever it changes (except for loading/error states)
+  useEffect(() => {
+    if (state.address && !state.loading && !state.error) {
+      try {
+        localStorage.setItem(
+          'aura-grow-state',
+          JSON.stringify({
+            address: state.address,
+            principalUsd: state.principalUsd,
+            source: state.source,
+            isWalletConnected: state.isWalletConnected,
+            ratePct: state.ratePct,
+            years: state.years,
+          })
+        )
+      } catch (error) {
+        console.warn('Failed to save state to localStorage:', error)
+      }
+    }
+  }, [
+    state.address,
+    state.principalUsd,
+    state.source,
+    state.isWalletConnected,
+    state.ratePct,
+    state.years,
+    state.loading,
+    state.error,
+  ])
+
+  // Sync with wagmi when it connects/disconnects
+  useEffect(() => {
+    if (isConnected && wagmiAddress && !state.isWalletConnected) {
+      // Wagmi connected but our state doesn't know about it
+      // This happens when wallet auto-connects on page load
+      setState((prev) => ({
+        ...prev,
+        address: wagmiAddress,
+        isWalletConnected: true,
+        source: 'AURA',
+        // Don't clear other state, just update the connection info
+      }))
+    } else if (!isConnected && state.isWalletConnected) {
+      // Wagmi disconnected but our state still thinks it's connected
+      // This happens when wallet is disconnected externally
+      setState((prev) => ({
+        ...prev,
+        address: '',
+        principalUsd: null,
+        source: 'Manual',
+        cached: false,
+        isWalletConnected: false,
+      }))
+      try {
+        localStorage.removeItem('aura-grow-state')
+      } catch (error) {
+        console.warn('Failed to clear localStorage:', error)
+      }
+    }
+  }, [isConnected, wagmiAddress, state.isWalletConnected])
 
   const handleAddressSubmit = async (
     address: string,
@@ -119,6 +211,13 @@ function App() {
   }
 
   const handleChangeAddress = () => {
+    // Clear localStorage when user explicitly changes address
+    try {
+      localStorage.removeItem('aura-grow-state')
+    } catch (error) {
+      console.warn('Failed to clear localStorage:', error)
+    }
+
     setState((prev) => ({
       ...prev,
       address: '',
@@ -132,6 +231,16 @@ function App() {
   }
 
   const handleDisconnectWallet = () => {
+    // Disconnect the wallet first
+    disconnect()
+
+    // Clear localStorage when user explicitly disconnects wallet
+    try {
+      localStorage.removeItem('aura-grow-state')
+    } catch (error) {
+      console.warn('Failed to clear localStorage:', error)
+    }
+
     setState((prev) => ({
       ...prev,
       address: '',
@@ -174,7 +283,7 @@ function App() {
   }
 
   return (
-    <Web3Provider>
+    <>
       <WalletAccountListener
         onAddressChange={handleWalletAddressChange}
         currentAddress={state.address}
@@ -505,6 +614,14 @@ function App() {
           </footer>
         </div>
       </div>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <Web3Provider>
+      <AppContent />
     </Web3Provider>
   )
 }

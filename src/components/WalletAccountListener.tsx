@@ -77,13 +77,8 @@ export function WalletAccountListener({
     }
   }, [isWalletConnected])
 
-  // Disconnect wallet when isWalletConnected becomes false
-  useEffect(() => {
-    if (!isWalletConnected && isConnected) {
-      disconnect()
-      onDisconnect?.()
-    }
-  }, [isWalletConnected, isConnected, disconnect, onDisconnect])
+  // Don't automatically disconnect wallet - let the user control this
+  // The disconnect should only happen when user explicitly clicks "Disconnect Wallet"
 
   // This component doesn't render anything
   return null
